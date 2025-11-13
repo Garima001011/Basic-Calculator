@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mini Calc</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="calc">
+    <h1 class="calc__title">Mini Calculator</h1>
+
+    <label class="calc__field">
+      <span>First number</span>
+      <input type="number" id="a" step="any" placeholder="e.g., 12.5" />
+    </label>
+
+    <label class="calc__field">
+      <span>Second number</span>
+      <input type="number" id="b" step="any" placeholder="e.g., 3" />
+    </label>
+
+    <div class="calc__buttons" role="group" aria-label="Operations">
+      <button class="btn" data-op="+">+</button>
+      <button class="btn" data-op="-">−</button>
+      <button class="btn" data-op="*">×</button>
+      <button class="btn" data-op="/">÷</button>
+    </div>
+
+    <p class="calc__result">
+      <span>Result: </span>
+      <output id="out" aria-live="polite">0</output>
+    </p>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
