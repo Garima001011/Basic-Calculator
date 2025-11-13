@@ -1,38 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mini Calc</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Basic Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="calc">
-    <h1 class="calc__title">Mini Calculator</h1>
+<div class="calc">
+    <div id="display" class="calc__display">0</div>
 
-    <label class="calc__field">
-      <span>First number</span>
-      <input type="number" id="a" step="any" placeholder="e.g., 12.5" />
-    </label>
+    <div class="calc__keys">
+        <button class="btn btn-func" data-action="clear">C</button>
+        <button class="btn btn-func" data-action="sign">±</button>
+        <button class="btn btn-func" data-action="percent">%</button>
+        <button class="btn btn-op" data-op="/">÷</button>
 
-    <label class="calc__field">
-      <span>Second number</span>
-      <input type="number" id="b" step="any" placeholder="e.g., 3" />
-    </label>
+        <button class="btn" data-digit="7">7</button>
+        <button class="btn" data-digit="8">8</button>
+        <button class="btn" data-digit="9">9</button>
+        <button class="btn btn-op" data-op="*">×</button>
 
-    <div class="calc__buttons" role="group" aria-label="Operations">
-      <button class="btn" data-op="+">+</button>
-      <button class="btn" data-op="-">−</button>
-      <button class="btn" data-op="*">×</button>
-      <button class="btn" data-op="/">÷</button>
+        <button class="btn" data-digit="4">4</button>
+        <button class="btn" data-digit="5">5</button>
+        <button class="btn" data-digit="6">6</button>
+        <button class="btn btn-op" data-op="-">−</button>
+
+        <button class="btn" data-digit="1">1</button>
+        <button class="btn" data-digit="2">2</button>
+        <button class="btn" data-digit="3">3</button>
+        <button class="btn btn-op" data-op="+">+</button>
+
+        <button class="btn btn-zero" data-digit="0">0</button>
+        <button class="btn" data-dot=".">.</button>
+        <button class="btn btn-eq" data-action="equals">=</button>
     </div>
+</div>
 
-    <p class="calc__result">
-      <span>Result: </span>
-      <output id="out" aria-live="polite">0</output>
-    </p>
-  </main>
-
-  <script src="main.js"></script>
+<script src="main.js"></script>
 </body>
 </html>

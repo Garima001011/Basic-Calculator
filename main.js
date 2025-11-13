@@ -1,51 +1,120 @@
-const a = document.getElementById('a');
-const b = document.getElementById('b');
-const out = document.getElementById('out');
+const display = document.getElementById("display");
 
-const parse = (el) => {
-  const v = parseFloat(el.value);
-  return Number.isFinite(v) ? v : null;
+let firstValue = null;
+let operator = null;
+let waitingForSecond = false;
+
+const formatValue = (value) => {
+  const str = String(value);
+  return str.length > 12 ? Number(value).toPrecision(10) : str;
 };
 
-const format = (n) => {
-  return Number.isInteger(n) ? String(n) : String(+n.toFixed(8));
+const updateDisplay = (value) => {
+  display.textContent = formatValue(value);
 };
 
-const calc = (op) => {
-  const x = parse(a);
-  const y = parse(b);
+const inputDigit = (digit) => {
+  if (waitingForSecond) {
+    display.textContent = digit;
+    waitingForSecond = false;
+  } else {
+    const current = display.textContent === "0" ? "" : display.textContent;
+    display.textContent = current + digit;
+  }
+};
 
-  if (x === null || y === null) {
-    out.textContent = 'Enter both numbers';
+const inputDot = () => {
+  if (waitingForSecond) {
+    display.textContent = "0.";
+    waitingForSecond = false;
     return;
   }
-  if (op === '/' && y === 0) {
-    out.textContent = 'Cannot divide by 0';
-    return;
+  if (!display.textContent.includes(".")) {
+    display.textContent += ".";
   }
-
-  const map = {
-    '+': () => x + y,
-    '-': () => x - y,
-    '*': () => x * y,
-    '/': () => x / y
-  };
-
-  const fn = map[op];
-  out.textContent = format(fn());
 };
 
-document.querySelector('.calc__buttons').addEventListener('click', (e) => {
-  const op = e.target?.dataset?.op;
-  if (op) calc(op);
-});
+const clearAll = () => {
+  firstValue = null;
+  operator = null;
+  waitingForSecond = false;
+  updateDisplay(0);
+};
 
-let lastOp = '+';
-document.querySelectorAll('.btn').forEach(btn => {
-  btn.addEventListener('click', () => { lastOp = btn.dataset.op; });
-});
-[a, b].forEach(el => {
-  el.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') calc(lastOp);
-  });
+const changeSign = () => {
+  if (display.textContent === "0") return;
+  if (display.textContent.startsWith("-")) {
+    display.textContent = display.textContent.slice(1);
+  } else {
+    display.textContent = "-" + display.textContent;
+  }
+};
+
+const percent = () => {
+  const current = parseFloat(display.textContent) || 0;
+  updateDisplay(current / 100);
+};
+
+const performCalc = (op, first, second) => {
+  switch (op) {
+    case "+": return first + second;
+    case "-": return first - second;
+    case "*": return first * second;
+    case "/": return second === 0 ? "Err" : first / second;
+    default:  return second;
+  }
+};
+
+const handleOperator = (nextOp) => {
+  const current = parseFloat(display.textContent);
+
+  if (firstValue === null) {
+    firstValue = current;
+  } else if (!waitingForSecond && operator) {
+    const result = performCalc(operator, firstValue, current);
+    firstValue = typeof result === "number" ? result : null;
+    updateDisplay(result);
+  }
+
+  operator = nextOp;
+  waitingForSecond = true;
+};
+
+const equals = () => {
+  if (operator === null || waitingForSecond) return;
+  const current = parseFloat(display.textContent);
+  const result = performCalc(operator, firstValue, current);
+  firstValue = typeof result === "number" ? result : null;
+  operator = null;
+  waitingForSecond = false;
+  updateDisplay(result);
+};
+
+document.querySelector(".calc__keys").addEventListener("click", (e) => {
+  const btn = e.target;
+  if (!btn.classList.contains("btn")) return;
+
+  const { digit, op, action, dot } = btn.dataset;
+
+  if (digit !== undefined) {
+    inputDigit(digit);
+    return;
+  }
+  if (dot !== undefined) {
+    inputDot();
+    return;
+  }
+  if (op !== undefined) {
+    handleOperator(op);
+    return;
+  }
+  if (action === "clear") {
+    clearAll();
+  } else if (action === "sign") {
+    changeSign();
+  } else if (action === "percent") {
+    percent();
+  } else if (action === "equals") {
+    equals();
+  }
 });
