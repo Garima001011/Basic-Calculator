@@ -33,6 +33,21 @@ body {
   width: 320px;
 }
 
+.display-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.calc__history {
+  font-size: 1.1rem;
+  color: #94a3b8;
+  text-align: right;
+  min-height: 20px;
+  padding-right: 4px;
+  user-select: none;
+}
+
 .calc__display {
   background: var(--display-bg);
   color: var(--display-text);
